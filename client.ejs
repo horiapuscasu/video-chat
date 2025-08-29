@@ -1,6 +1,9 @@
 <!doctype html>
 <html>
     <head>
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 		<link href="jquery-ui.css" rel="stylesheet">
         <script src="core.js"></script>
 <script src="lib-typedarrays.js"></script>
@@ -499,104 +502,116 @@ function init() {
 			console.log("Already connected to peer ", peer_id);
 			return;
 		}
-		var peer_connection = new RTCPeerConnection({
-				"iceServers": []//ICE_SERVERS
-			}, {
-				"optional": [{
-					"DtlsSrtpKeyAgreement": true
-				}]
-			}
-			/* this will no longer be needed by chrome
-			 * eventually (supposedly), but is necessary 
-			 * for now to get firefox to talk to chrome */
-		);
-		peers[peer_id] = peer_connection;
-		// Start the channel to chat
-		localChannel = peer_connection.createDataChannel('chat_channel');
-		// Function Called When Receive Message in Channel
-		localChannel.onmessage = function(event) {
-			var msg = JSON.parse(event.data);
-			let text = "",
-				timeStr = (msg.date ? new Date(msg.date).toLocaleTimeString() : new Date().toLocaleTimeString()),
-				containerToWrite;
-			var context = new(window.AudioContext || window.webkitAudioContext)();
-			var osc = context.createOscillator(); // instantiate an oscillator
-			osc.type = 'sine'; // this is the default - also square, sawtooth, triangle
-			osc.frequency.value = 440; // Hz
-			osc.connect(context.destination); // connect it to the destination
-			osc.start(); // start the oscillator
-			context.resume();
-			osc.stop(context.currentTime + 0.4); // stop 2 seconds after the current time
-			containerToWrite = document.getElementById("public-chat");
-			msg.text = punycode.ToUnicode(utf8.decode(msg.text));
-			if(msg.user !== null) {
-				text = `<b>${msg.user} - ${msg.text}</b> sent at ${timeStr}<br />`;
-			} else {
-				text = `<b>${msg.text}</b> at ${timeStr}<br />`;
-			}
-			if(text.length) {
-				containerToWrite.innerHTML = containerToWrite.innerHTML + text;
-				containerToWrite.scrollTop = containerToWrite.scrollHeight;
-			}
-		};
-		//logMessage(`Receive: ${event.data}`)};
-		// Function Called When Channel is Opened
-		//localChannel.onopen = (event) => logMessage(`Channel Changed: ${event.type}`);
-		// Function Called When Channel is Closed
-		//localChannel.onclose = (event) => logMessage(`Channel Changed: ${event.type}`);
-		peer_connection.onicecandidate = function(event) {
-			if(event.candidate) {
-				signaling_socket.emit('relayICECandidate', {
-					'peer_id': peer_id,
-					'ice_candidate': {
-						'sdpMLineIndex': event.candidate.sdpMLineIndex,
-						'candidate': event.candidate.candidate
-					}
-				});
-			}
+		try{
+			var peer_connection = new RTCPeerConnection({
+					"iceServers": []//ICE_SERVERS
+				}, {
+					"optional": [{
+						"DtlsSrtpKeyAgreement": true
+					}]
+				}
+				/* this will no longer be needed by chrome
+				 * eventually (supposedly), but is necessary 
+				 * for now to get firefox to talk to chrome */
+			);
 		}
-		peer_connection.ontrack = function(event) {
-				if(idws[peer_id] === -1) {
-					return;
+		catch(e){
+		}
+		if(peer_connection){
+			peers[peer_id] = peer_connection;
+			// Start the channel to chat
+			localChannel = peer_connection.createDataChannel('chat_channel');
+			// Function Called When Receive Message in Channel
+			localChannel.onmessage = function(event) {
+				var msg = JSON.parse(event.data);
+				let text = "",
+					timeStr = (msg.date ? new Date(msg.date).toLocaleTimeString() : new Date().toLocaleTimeString()),
+					containerToWrite;
+				var context = new(window.AudioContext || window.webkitAudioContext)();
+				var osc = context.createOscillator(); // instantiate an oscillator
+				osc.type = 'sine'; // this is the default - also square, sawtooth, triangle
+				osc.frequency.value = 440; // Hz
+				osc.connect(context.destination); // connect it to the destination
+				osc.start(); // start the oscillator
+				context.resume();
+				osc.stop(context.currentTime + 0.4); // stop 2 seconds after the current time
+				containerToWrite = document.getElementById("public-chat");
+				msg.text = punycode.ToUnicode(utf8.decode(msg.text));
+				if(msg.user !== null) {
+					text = `<b>${msg.user} - ${msg.text}</b> sent at ${timeStr}<br />`;
 				} else {
-					idws[peer_id] = -1;
+					text = `<b>${msg.text}</b> at ${timeStr}<br />`;
 				}
-				console.log("ontrack", event);
-				var remote_media = USE_VIDEO ? $("<video>") : $("<audio>");
-				remote_media.attr("autoplay", "autoplay");
-				if(MUTE_AUDIO_BY_DEFAULT) {
-					remote_media.attr("muted", "true");
+				if(text.length) {
+					containerToWrite.innerHTML = containerToWrite.innerHTML + text;
+					containerToWrite.scrollTop = containerToWrite.scrollHeight;
 				}
-				remote_media.attr("controls", "");
-				peer_media_elements[peer_id] = remote_media;
-				$('#videos').append(remote_media);
-				attachMediaStream(remote_media[0], event.streams[0]);
-			}
-			/* Add our local stream */
-		peer_connection.addStream(local_media_stream);
-		/* Only one side of the peer connection should create the
-		 * offer, the signaling server picks one to be the offerer. 
-		 * The other user will get a 'sessionDescription' event and will
-		 * create an offer, then send back an answer 'sessionDescription' to us
-		 */
-		if(config.should_create_offer) {
-			console.log("Creating RTC offer to ", peer_id);
-			peer_connection.createOffer(function(local_description) {
-				console.log("Local offer description is: ", local_description);
-				peer_connection.setLocalDescription(local_description, function() {
-					signaling_socket.emit('relaySessionDescription', {
+			};
+			//logMessage(`Receive: ${event.data}`)};
+			// Function Called When Channel is Opened
+			//localChannel.onopen = (event) => logMessage(`Channel Changed: ${event.type}`);
+			// Function Called When Channel is Closed
+			//localChannel.onclose = (event) => logMessage(`Channel Changed: ${event.type}`);
+			peer_connection.onicecandidate = function(event) {
+				if(event.candidate) {
+					signaling_socket.emit('relayICECandidate', {
 						'peer_id': peer_id,
-						'session_description': local_description
+						'ice_candidate': {
+							'sdpMLineIndex': event.candidate.sdpMLineIndex,
+							'candidate': event.candidate.candidate
+						}
 					});
-					console.log("Offer setLocalDescription succeeded");
-				}, function() {
-					Alert("Offer setLocalDescription failed!");
+				}
+			}
+			peer_connection.onicecandidateerror = function(event) {
+			  if (event.errorCode === 701) {
+				reportConnectFail(event.url, event.errorText);
+			  }
+			};
+			peer_connection.ontrack = function(event) {
+					if(idws[peer_id] === -1) {
+						return;
+					} else {
+						idws[peer_id] = -1;
+					}
+					console.log("ontrack", event);
+					var remote_media = USE_VIDEO ? $("<video>") : $("<audio>");
+					remote_media.attr("autoplay", "autoplay");
+					if(MUTE_AUDIO_BY_DEFAULT) {
+						remote_media.attr("muted", "true");
+					}
+					remote_media.attr("controls", "");
+					peer_media_elements[peer_id] = remote_media;
+					$('#videos').append(remote_media);
+					attachMediaStream(remote_media[0], event.streams[0]);
+				}
+				/* Add our local stream */
+			peer_connection.addStream(local_media_stream);
+			/* Only one side of the peer connection should create the
+			 * offer, the signaling server picks one to be the offerer. 
+			 * The other user will get a 'sessionDescription' event and will
+			 * create an offer, then send back an answer 'sessionDescription' to us
+			 */
+			if(config.should_create_offer) {
+				console.log("Creating RTC offer to ", peer_id);
+				peer_connection.createOffer(function(local_description) {
+					console.log("Local offer description is: ", local_description);
+					peer_connection.setLocalDescription(local_description, function() {
+						signaling_socket.emit('relaySessionDescription', {
+							'peer_id': peer_id,
+							'session_description': local_description
+						});
+						console.log("Offer setLocalDescription succeeded");
+					}, function() {
+						Alert("Offer setLocalDescription failed!");
+					});
+				}, function(error) {
+					console.log("Error sending offer: ", error);
 				});
-			}, function(error) {
-				console.log("Error sending offer: ", error);
-			});
+			}
 		}
 	});
+	
 	signaling_socket.on('news-response', function(data) {
 		console.log(data); //should output 'hello world'
 	});
