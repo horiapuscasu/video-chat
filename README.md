@@ -1,5 +1,7 @@
 Nodejs application for Windows- for this you  need installed only Nodejs no extra-typica(only Next button like always) 
 
+See even the firewall of the antivirus
+
 Use long polling when ...
     WebSocket connections are blocked by proxies or firewalls — especially in enterprise or corporate networks.
     You're working with older browsers or legacy client SDKs.
