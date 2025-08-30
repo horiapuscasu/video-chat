@@ -165,18 +165,9 @@ process.on('uncaughtException', function (err)
 	const io  = require('socket.io')(server,{
 		cors: {
 			origin: "*",
-			methods: ["GET", "POST"]
-		},
-		 handlePreflightRequest: (req, res) => {
-			const headers = {
-				"Access-Control-Allow-Headers": "Content-Type, Authorization",
-				"Access-Control-Allow-Origin": req.headers.origin,
-				"Access-Control-Allow-Credentials": true,
-				"Access-Control-Allow-Private-Network": true,
-				"Socket Powered By:":"Emiga Stream https://github.com/eminmuhammadi/emiga-stream.git"
-			};
-			res.writeHead(200, headers);
-			res.end();
+			methods: ["GET", "POST"],
+			allowedHeaders: ["my-custom-header"],
+			credentials: true
 		},
 		transports: ['websocket'],
 		allowEIO3: true,
