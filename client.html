@@ -1,0 +1,1061 @@
+<!doctype html>
+<html>
+    <head>
+		<link href="jquery-ui.css" rel="stylesheet">
+        <script src="core.js"></script>
+<script src="lib-typedarrays.js"></script>
+<script src="x64-core.js"></script>
+<script src="enc-utf16.js"></script>
+<script src="enc-base64.js"></script>
+<script src="md5.js"></script>
+<script src="sha1.js"></script>
+<script src="sha256.js"></script>
+<script src="sha224.js"></script>
+<script src="sha512.js"></script>
+<script src="sha384.js"></script>
+<script src="sha3.js"></script>
+<script src="ripemd160.js"></script>
+<script src="hmac.js"></script>
+<script src="pbkdf2.js"></script>
+<script src="evpkdf.js"></script>
+<script src="cipher-core.js"></script>
+<script src="mode-cfb.js"></script>
+<script src="mode-ctr.js"></script>
+<script src="mode-ofb.js"></script>
+<script src="mode-ecb.js"></script>
+<script src="pad-ansix923.js"></script>
+<script src="pad-iso10126.js"></script>
+<script src="pad-zeropadding.js"></script>
+<script src="pad-iso97971.js"></script>
+<script src="pad-nopadding.js"></script>
+<script src="rc4.js"></script>
+<script src="rabbit.js"></script>
+<script src="rabbit-legacy.js"></script>
+<script src="aes.js"></script>
+<script src="blowfish.js"></script>
+<script src="tripledes.js"></script>
+
+	<script src="jquery-3.6.0.js"></script>
+<script src="jquery-ui.js"></script>
+<script type="text/javascript" src="punycode.js"></script>
+<script type="text/javascript" src="utf8.js"></script>
+<script src='inputEmoji.js'></script>
+        <style>
+            html, body { 
+                background-color: white; 
+            }
+            video {
+                width:  214px;
+                height:  160px;
+                border:  1px solid white;
+            }
+			#encrypt { min-width: 500px;border: 1px solid black;min-height: 100px;clip: auto;overflow: scroll;word-wrap: break-word;}
+
+    #raw { min-width: 500px;border: 1px solid black;min-height: 100px;clip: auto;word-wrap: break-word;overflow: scroll; }
+    
+    ul#form li { list-style: none;height: 30px; }
+   
+    textarea { font-family: "Andale Mono", monospace;display: block;}
+
+    #intro { width: 500px;position: relative;}
+    
+    #status { color: red;}*/
+    
+    a.fileel { color: red; cursor: pointer;}
+    
+    a.downloaded { color: green;  cursor: pointer;}
+	
+	input,select{
+		border: 1px solid black; border-radius: 5px;
+	}
+	div{
+		border-radius: 5px;
+	}
+	textarea{
+		border: 1px solid black;
+	}
+    </style>
+	<style>
+      * {
+        box-sizing: border-box;
+        color: #2f3235;
+      }
+      h1, h2, h3, h4 {
+        margin: 0;
+		font-family: "Andale Mono", monospace;
+      }
+      h1, h2, h3 {
+        color: #4a5156;
+      }
+      h4 {
+        color: #2f3235;
+      }
+      a {
+        color: #0082e5;
+        text-decoration: none;
+      }
+      .error {
+        color: #ff0000;
+        font-weight: bold;
+      }
+      #private-chat, #public-chat, #user-list {
+        width: 400px;
+        height: 280px;
+        border:1px solid #000000;
+        float: left;
+        /*margin: 20px 50px 10px 30px;*/
+		margin: 5px 5px 5px 5px;
+        background-color: white;
+        overflow: auto;
+        scroll-behavior: smooth;
+        padding: 12px;
+		inline-size: 30%;
+		overflow-wrap: break-word;
+		resize:both;
+		font-weight: normal;
+      }
+      #private-chat.disabled {
+        background-color: lightblue;
+      }
+      #private-chat .header {
+        font-weight: bold;
+        font-size: 1.1em;
+        text-align: center;
+        color: #02528c;
+        margin-bottom: 10px;
+      }
+	  .user {
+        font-weight: bold;
+        font-size: 12px;
+      }
+	  .msg {
+        font-size: 10px;
+      }
+      .content .chat-label {
+        margin: 20px 50px 0 30px;
+        float: left;
+        width: 400px;
+      }
+      .content::after {
+        content: "";
+        clear: both;
+        display: block;
+      }
+      .chatbox>div {
+        float: left;
+      }
+      .chatbox, .namebox {
+        margin: 20px 0 20px 30px;
+      }
+      #private-text, #public-text, #name-text {
+        width: 400px;
+        margin: 10px 80px 0 0;
+		font-weight: normal;
+      }
+	  textarea {word-wrap:break-word;text-wrap:unrestricted}
+	  .hide { display:none; }
+.btn1 {
+	height: 25px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	border: solid 1px #20538D;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+	background: navy;
+	color: #FFF;
+	padding: 3px 12px;
+	text-decoration: none;
+	font-family: "Andale Mono", monospace;
+	font-weight:700;
+}
+
+.btn1:hover {
+	height: 25px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	border: solid 1px #20538D;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+	background: #05D129;
+	color: #FFF;
+	padding: 3px 12px;
+	text-decoration: none;
+	font-family: "Andale Mono", monospace;
+	font-weight:700;
+}
+.txt1 {
+	height: 25px;
+	border-color: #2E6E9E;
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+	border-style: solid;
+	border-width: 1px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+	/*problem bigger input text*/
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	color: #555;
+	float: none;
+	padding: 6px 6px;
+	font-family: "Helvetica Neue", Sans-Serif;
+	font-size: 10px;
+	font-style: normal;
+}
+
+        </style>
+
+        <script src="socket.io-1.4.5.js"></script>
+    </head>
+    <body>
+	 <div>
+        <h4>Password</h4>
+        <input type="password" id="pass" />
+		<select id="room">
+		<h4>Room</h4>
+		<% if (result) { 
+			for ( var i = 0; i < result.length; i++ ){
+
+    %><option value="<%=result[ i ].id %>">><%=result[ i ].name %></option><%
+}
+	} %>
+		</select>
+		<button id="login-button">login</button>
+      </div>
+	<div id="videos" class="hide hide1">
+		<button id="mute-button">mute all</button><br/>
+	</div>
+	<div class="hide hide1">
+	<div class="hide hide1">
+      <h4>User</h4>
+      <input type="text" id="name-text" />
+	  <div>
+	  <textarea id="public-text" maxlength="1850" placeholder='the message or drag and drop file to upload'></textarea>
+	  </div>
+	  <button id="message-button">send</button>
+	  <div class="hide hide1">
+		<input id="fileupload" type="file" name="fileupload" style="display:none;"/>
+		<br/><h4>Password(key for file)</h4><input id="fileupload_password" type="password"/>
+		<p id="status"></p>
+		<progress id="upload-progress" style="display:none;"></progress>
+      </div>
+    </div>
+	
+		<div class="hide hide1">
+		<div id="public-chat"></div>
+	
+  </div>
+
+  
+  </div>
+   <script>
+   $('button').addClass('btn1');
+   $('input[type=text],input[type=password]').addClass('txt1');
+   function randomIntFromInterval(min, max) { // min and max included 
+	return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+   $('input').attr('autocomplete', 'off');
+   var emojis = [
+	['o/', '👋'],
+	['</3', '💔'],
+	['<3', '💗'],
+	['8-D', '😁'],
+	['8D', '😁'],
+	[':-D', '😁'],
+	['=-3', '😁'],
+	['=-D', '😁'],
+	['=3', '😁'],
+	['=D', '😁'],
+	['B^D', '😁'],
+	['X-D', '😁'],
+	['XD', '😁'],
+	['x-D', '😁'],
+	['xD', '😁'],
+	[':\')', '😂'],
+	[':\'-)', '😂'],
+	[':-))', '😃'],
+	['8)', '😄'],
+	[':)', '😄'],
+	[':-)', '😄'],
+	[':3', '😄'],
+	[':D', '😄'],
+	[':]', '😄'],
+	[':^)', '😄'],
+	[':c)', '😄'],
+	[':o)', '😄'],
+	[':}', '😄'],
+	[':っ)', '😄'],
+	['=)', '😄'],
+	['=]', '😄'],
+	['0:)', '😇'],
+	['0:-)', '😇'],
+	['0:-3', '😇'],
+	['0:3', '😇'],
+	['0;^)', '😇'],
+	['O:-)', '😇'],
+	['3:)', '😈'],
+	['3:-)', '😈'],
+	['}:)', '😈'],
+	['}:-)', '😈'],
+	['*)', '😉'],
+	['*-)', '😉'],
+	[':-,', '😉'],
+	[';)', '😉'],
+	[';-)', '😉'],
+	[';-]', '😉'],
+	[';D', '😉'],
+	[';]', '😉'],
+	[';^)', '😉'],
+	[':-|', '😐'],
+	[':|', '😐'],
+	[':(', '😒'],
+	[':-(', '😒'],
+	[':-<', '😒'],
+	[':-[', '😒'],
+	[':-c', '😒'],
+	[':<', '😒'],
+	[':[', '😒'],
+	[':c', '😒'],
+	[':{', '😒'],
+	[':っC', '😒'],
+	['%)', '😖'],
+	['%-)', '😖'],
+	[':-P', '😜'],
+	[':-b', '😜'],
+	[':-p', '😜'],
+	[':-Þ', '😜'],
+	[':-þ', '😜'],
+	[':P', '😜'],
+	[':b', '😜'],
+	[':p', '😜'],
+	[':Þ', '😜'],
+	[':þ', '😜'],
+	[';(', '😜'],
+	['=p', '😜'],
+	['X-P', '😜'],
+	['XP', '😜'],
+	['d:', '😜'],
+	['x-p', '😜'],
+	['xp', '😜'],
+	[':-||', '😠'],
+	[':@', '😠'],
+	[':-.', '😡'],
+	[':-/', '😡'],
+	[':/', '😡'],
+	[':L', '😡'],
+	[':S', '😡'],
+	[':\\', '😡'],
+	['=/', '😡'],
+	['=L', '😡'],
+	['=\\', '😡'],
+	[':\'(', '😢'],
+	[':\'-(', '😢'],
+	['^5', '😤'],
+	['^<_<', '😤'],
+	['o/\\o', '😤'],
+	['|-O', '😫'],
+	['|;-)', '😫'],
+	[':###..', '😰'],
+	[':-###..', '😰'],
+	['D-\':', '😱'],
+	['D8', '😱'],
+	['D:', '😱'],
+	['D:<', '😱'],
+	['D;', '😱'],
+	['D=', '😱'],
+	['DX', '😱'],
+	['v.v', '😱'],
+	['8-0', '😲'],
+	[':-O', '😲'],
+	[':-o', '😲'],
+	[':O', '😲'],
+	[':o', '😲'],
+	['O-O', '😲'],
+	['O_O', '😲'],
+	['O_o', '😲'],
+	['o-o', '😲'],
+	['o_O', '😲'],
+	['o_o', '😲'],
+	[':$', '😳'],
+	['#-)', '😵'],
+	[':#', '😶'],
+	[':&', '😶'],
+	[':-#', '😶'],
+	[':-&', '😶'],
+	[':-X', '😶'],
+	[':X', '😶'],
+	[':-J', '😼'],
+	[':*', '😽'],
+	[':^*', '😽'],
+	['ಠ_ಠ', '🙅'],
+	['*\\0/*', '🙆'],
+	['\\o/', '🙆'],
+	[':>', '😄'],
+	['>.<', '😡'],
+	['>:(', '😠'],
+	['>:)', '😈'],
+	['>:-)', '😈'],
+	['>:/', '😡'],
+	['>:O', '😲'],
+	['>:P', '😜'],
+	['>:[', '😒'],
+	['>:\\', '😡'],
+	['>;)', '😈'],
+	['>_>^', '😤'],
+];
+$('textarea').emoji();
+   //setTimeout('window.location.reload()',300000);
+/** CONFIG **/
+//var SIGNALING_SERVER = "http://localh00t:8080";
+var SIGNALING_SERVER = window.location.protocol + "://" + window.location.hostname + (window.location.port ? ":" + window.location.port : "");
+var USE_AUDIO = true;
+var USE_VIDEO = true;
+var DEFAULT_CHANNEL = 'some-global-channel-name';
+var MUTE_AUDIO_BY_DEFAULT = false;
+/** You should probably use a different stun server doing commercial stuff **/
+/** Also see: https://gist.github.com/zziuni/3741933 **/
+/*var ICE_SERVERS = [
+    {urls:"stun:stun.l.google.com:19302"}
+];*/
+var ICE_SERVERS = [];
+
+function randomInteger(min, max) {
+	return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+idw = randomInteger(0, 100000);
+var signaling_socket = null; /* our socket.io connection to our webserver */
+var local_media_stream = null; /* our own microphone / webcam */
+var peers = {}; /* keep track of our peer connections, indexed by peer_id (aka socket.io id) */
+var peer_media_elements = {}; /* keep track of our <video>/<audio> tags, indexed by peer_id */
+document.getElementById('pass').value = localStorage.getItem(window.location.host+'_pass');
+var pass_enc = document.getElementById('pass').value;
+function init() {
+	console.log("Connecting to signaling server");
+	//signaling_socket = io(SIGNALING_SERVER, {'transports': ['websocket', 'polling']});
+	
+	signaling_socket.on('connect', function() {
+		$(".hide1").removeClass("hide");
+		console.log("Connected to signaling server");
+		setup_local_media(function() {
+			/* once the user has given us access to their
+			 * microphone/camcorder, join the channel and start peering up */
+			join_chat_channel(parseInt(document.getElementById('room').value), {
+				'whatever-you-want-here': idw
+			});
+			signaling_socket.emit('news', idw);
+		});
+	});
+	signaling_socket.on('disconnect', function() {
+		console.log("Disconnected from signaling server");
+		/* Tear down all of our peer connections and remove all the
+		 * media divs when we disconnect */
+		for(peer_id in peer_media_elements) {
+			peer_media_elements[peer_id].remove();
+		}
+		for(peer_id in peers) {
+			peers[peer_id].close();
+		}
+		peers = {};
+		peer_media_elements = {};
+	});
+	signaling_socket.on('connect_error', function() {
+		setTimeout(function(){
+		$('#login-button').trigger('click');
+		},1000);
+	});
+
+	function join_chat_channel(channel, userdata) {
+		signaling_socket.emit('join', {
+			"channel": channel,
+			"userdata": userdata
+		});
+	}
+
+	function part_chat_channel(channel) {
+		signaling_socket.emit('part', channel);
+	}
+	/** 
+	 * When we join a group, our signaling server will send out 'addPeer' events to each pair
+	 * of users in the group (creating a fully-connected graph of users, ie if there are 6 people
+	 * in the channel you will connect directly to the other 5, so there will be a total of 15 
+	 * connections in the network). 
+	 */
+	var idws = {};
+	signaling_socket.on('addPeer', function(config) {
+		console.log('Signaling server said to add peer:', config.peer_id);
+		var peer_id = config.peer_id;
+		if(peer_id in peers) {
+			/* This could happen if the user joins multiple channels where the other peer is also in. */
+			console.log("Already connected to peer ", peer_id);
+			return;
+		}
+		var peer_connection = new RTCPeerConnection({
+				"iceServers": ICE_SERVERS
+			}, {
+				"optional": [{
+					"DtlsSrtpKeyAgreement": true
+				}]
+			}
+			/* this will no longer be needed by chrome
+			 * eventually (supposedly), but is necessary 
+			 * for now to get firefox to talk to chrome */
+		);
+		peers[peer_id] = peer_connection;
+		// Start the channel to chat
+		localChannel = peer_connection.createDataChannel('chat_channel');
+		// Function Called When Receive Message in Channel
+		localChannel.onmessage = function(event) {
+			var msg = JSON.parse(event.data);
+			let text = "",
+				timeStr = (msg.date ? new Date(msg.date).toLocaleTimeString() : new Date().toLocaleTimeString()),
+				containerToWrite;
+			var context = new(window.AudioContext || window.webkitAudioContext)();
+			var osc = context.createOscillator(); // instantiate an oscillator
+			osc.type = 'sine'; // this is the default - also square, sawtooth, triangle
+			osc.frequency.value = 440; // Hz
+			osc.connect(context.destination); // connect it to the destination
+			osc.start(); // start the oscillator
+			context.resume();
+			osc.stop(context.currentTime + 0.4); // stop 2 seconds after the current time
+			containerToWrite = document.getElementById("public-chat");
+			msg.text = punycode.ToUnicode(utf8.decode(msg.text));
+			if(msg.user !== null) {
+				text = `<b>${msg.user} - ${msg.text}</b> sent at ${timeStr}<br />`;
+			} else {
+				text = `<b>${msg.text}</b> at ${timeStr}<br />`;
+			}
+			if(text.length) {
+				containerToWrite.innerHTML = containerToWrite.innerHTML + text;
+				containerToWrite.scrollTop = containerToWrite.scrollHeight;
+			}
+		};
+		//logMessage(`Receive: ${event.data}`)};
+		// Function Called When Channel is Opened
+		//localChannel.onopen = (event) => logMessage(`Channel Changed: ${event.type}`);
+		// Function Called When Channel is Closed
+		//localChannel.onclose = (event) => logMessage(`Channel Changed: ${event.type}`);
+		peer_connection.onicecandidate = function(event) {
+			if(event.candidate) {
+				signaling_socket.emit('relayICECandidate', {
+					'peer_id': peer_id,
+					'ice_candidate': {
+						'sdpMLineIndex': event.candidate.sdpMLineIndex,
+						'candidate': event.candidate.candidate
+					}
+				});
+			}
+		}
+		peer_connection.ontrack = function(event) {
+				if(idws[peer_id] === -1) {
+					return;
+				} else {
+					idws[peer_id] = -1;
+				}
+				console.log("ontrack", event);
+				var remote_media = USE_VIDEO ? $("<video>") : $("<audio>");
+				remote_media.attr("autoplay", "autoplay");
+				if(MUTE_AUDIO_BY_DEFAULT) {
+					remote_media.attr("muted", "true");
+				}
+				remote_media.attr("controls", "");
+				peer_media_elements[peer_id] = remote_media;
+				$('#videos').append(remote_media);
+				attachMediaStream(remote_media[0], event.streams[0]);
+			}
+			/* Add our local stream */
+		peer_connection.addStream(local_media_stream);
+		/* Only one side of the peer connection should create the
+		 * offer, the signaling server picks one to be the offerer. 
+		 * The other user will get a 'sessionDescription' event and will
+		 * create an offer, then send back an answer 'sessionDescription' to us
+		 */
+		if(config.should_create_offer) {
+			console.log("Creating RTC offer to ", peer_id);
+			peer_connection.createOffer(function(local_description) {
+				console.log("Local offer description is: ", local_description);
+				peer_connection.setLocalDescription(local_description, function() {
+					signaling_socket.emit('relaySessionDescription', {
+						'peer_id': peer_id,
+						'session_description': local_description
+					});
+					console.log("Offer setLocalDescription succeeded");
+				}, function() {
+					Alert("Offer setLocalDescription failed!");
+				});
+			}, function(error) {
+				console.log("Error sending offer: ", error);
+			});
+		}
+	});
+	signaling_socket.on('news-response', function(data) {
+		console.log(data); //should output 'hello world'
+	});
+	/** 
+	 * Peers exchange session descriptions which contains information
+	 * about their audio / video settings and that sort of stuff. First
+	 * the 'offerer' sends a description to the 'answerer' (with type
+	 * "offer"), then the answerer sends one back (with type "answer").  
+	 */
+	signaling_socket.on('sessionDescription', function(config) {
+		console.log('Remote description received: ', config);
+		var peer_id = config.peer_id;
+		var peer = peers[peer_id];
+		var remote_description = config.session_description;
+		console.log(config.session_description);
+		var desc = new RTCSessionDescription(remote_description);
+		var stuff = peer.setRemoteDescription(desc, function() {
+			console.log("setRemoteDescription succeeded");
+			if(remote_description.type == "offer") {
+				console.log("Creating answer");
+				peer.createAnswer(function(local_description) {
+					console.log("Answer description is: ", local_description);
+					peer.setLocalDescription(local_description, function() {
+						signaling_socket.emit('relaySessionDescription', {
+							'peer_id': peer_id,
+							'session_description': local_description
+						});
+						console.log("Answer setLocalDescription succeeded");
+					}, function() {
+						Alert("Answer setLocalDescription failed!");
+					});
+				}, function(error) {
+					console.log("Error creating answer: ", error);
+					console.log(peer);
+				});
+			}
+		}, function(error) {
+			console.log("setRemoteDescription error: ", error);
+		});
+		console.log("Description Object: ", desc);
+	});
+	/**
+	 * The offerer will send a number of ICE Candidate blobs to the answerer so they 
+	 * can begin trying to find the best path to one another on the net.
+	 */
+	signaling_socket.on('iceCandidate', function(config) {
+		var peer = peers[config.peer_id];
+		var ice_candidate = config.ice_candidate;
+		peer.addIceCandidate(new RTCIceCandidate(ice_candidate));
+	});
+	/**
+	 * When a user leaves a channel (or is disconnected from the
+	 * signaling server) everyone will recieve a 'removePeer' message
+	 * telling them to trash the media channels they have open for those
+	 * that peer. If it was this client that left a channel, they'll also
+	 * receive the removePeers. If this client was disconnected, they
+	 * wont receive removePeers, but rather the
+	 * signaling_socket.on('disconnect') code will kick in and tear down
+	 * all the peer sessions.
+	 */
+	signaling_socket.on('removePeer', function(config) {
+		console.log('Signaling server said to remove peer:', config);
+		var peer_id = config.peer_id;
+		if(peer_id in peer_media_elements) {
+			peer_media_elements[peer_id].remove();
+		}
+		if(peer_id in peers) {
+			peers[peer_id].close();
+		}
+		delete peers[peer_id];
+		delete peer_media_elements[config.peer_id];
+	});
+	signaling_socket.on('updatePlayer', function(msg) {
+		console.log('A player moves on map ');
+		//console.log(msg);
+		var msg = CryptoJS.AES.decrypt(msg, pass_enc).toString(CryptoJS.enc.Utf8);
+		var msg = JSON.parse(msg);
+		let text = "",
+			timeStr = (msg.date ? new Date(msg.date).toLocaleTimeString() : new Date().toLocaleTimeString()),
+			containerToWrite;
+		var context = new(window.AudioContext || window.webkitAudioContext)();
+		var osc = context.createOscillator(); // instantiate an oscillator
+		osc.type = 'sine'; // this is the default - also square, sawtooth, triangle
+		osc.frequency.value = 440; // Hz
+		osc.connect(context.destination); // connect it to the destination
+		osc.start(); // start the oscillator
+		context.resume();
+		osc.stop(context.currentTime + 0.4); // stop 2 seconds after the current time
+		containerToWrite = document.getElementById("public-chat");
+		msg.text = punycode.ToUnicode(utf8.decode(msg.text));
+		if(msg.user !== null) {
+			text = `<b>${msg.user}</b> - ${msg.text} sent at - ${timeStr}<br />`;
+		} else {
+			text = `<b>${msg.text}</b> at ${timeStr}<br />`;
+		}
+		if(text.length) {
+			containerToWrite.innerHTML = containerToWrite.innerHTML + text;
+			containerToWrite.scrollTop = containerToWrite.scrollHeight;
+		}
+	});
+}
+
+/***********************/
+/** Local media stuff **/
+/***********************/
+function setup_local_media(callback, errorback) {
+	if(local_media_stream != null) { /* ie, if we've already been initialized */
+		if(callback) callback();
+		return;
+	}
+	/* Ask user for permission to use the computers microphone and/or camera, 
+	 * attach it to an <audio> or <video> tag if they give us access. */
+	console.log("Requesting access to local audio / video inputs");
+	navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
+	attachMediaStream = function(element, stream) {
+		console.log('DEPRECATED, attachMediaStream will soon be removed.');
+		element.srcObject = stream;
+	};
+	navigator.mediaDevices.getUserMedia({
+		"audio": USE_AUDIO,
+		"video": USE_VIDEO
+	}).then(function(stream) { /* user accepted access to a/v */
+		console.log("Access granted to audio/video");
+		local_media_stream = stream;
+		var local_media = USE_VIDEO ? $("<video>") : $("<audio>");
+		local_media.attr("autoplay", "autoplay");
+		local_media.attr("muted", "true"); /* always mute ourselves by default */
+		local_media.attr("controls", "");
+		$('#videos').append(local_media);
+		attachMediaStream(local_media[0], stream);
+		if(callback) callback();
+	}).catch(function() { /* user denied access to a/v */
+		console.log("Access denied for audio/video");
+		alert("You chose not to provide access to the camera/microphone, demo will not work.");
+		if(errorback) errorback();
+	})
+}
+
+// Takes as input a Base64 string
+// outputs Base64 encrypted string
+function Base64Crypt(b64string, key) {
+  //var bytes = Crypto.util.base64ToBytes(b64string);
+  //var crypt = Crypto.AES.encrypt(Crypto.charenc.Binary.bytesToString(bytes), key);
+  var crypt = CryptoJS.AES.encrypt(b64string,key).toString();
+  return crypt;
+}
+
+
+// Takes as input a Base64 string
+// Ouputs the unencrypted Base64 string
+function Base64Decrypt(b64string, key) {
+  //var decrypt = Crypto.AES.decrypt(b64string, key);
+  //return Crypto.util.bytesToBase64(Crypto.charenc.Binary.stringToBytes(decrypt));
+  return CryptoJS.AES.decrypt(b64string, key).toString(CryptoJS.enc.Utf8);
+}
+
+function PackData(boundary, data, filename, varname) {
+  var datapack = '';
+  datapack += '--' + boundary + '\r\n';
+  datapack += 'Content-Disposition: form-data; ';
+  datapack += 'name="' + varname + '"; filename="' + filename + '"\r\n';
+  datapack += 'Content-Type: application/octet-stream\r\n\r\n';
+  datapack += data;
+  datapack += '\r\n';
+  datapack += '--' + boundary + '--';
+  return datapack;
+}
+
+function UploadData(url, datapack, boundary) {
+   const uploadProgress = document.getElementById("upload-progress");
+  var statusDiv = document.getElementById('status');
+  statusDiv.innerHTML = '';
+  var fileupload = document.getElementById('fileupload');
+  if (fileupload.files[0].size >= 18.5*1024*1024 ) {
+		statusDiv.innerHTML = 'You cannot upload this file because its size exceeds the maximum limit of 18.5 MB.';
+		return;
+	}	
+  var xhr = new XMLHttpRequest();
+  /*
+  xhr.onreadystatechange = function() {
+      if(this.readyState == 4)
+         alert("error in upload!");
+  }
+  */
+  //xhr.setDisableHeaderCheck(true);
+  xhr.open('POST', url);
+  xhr.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + boundary);
+  xhr.withCredentials = true;
+  //xhr.setRequestHeader('Cookie', 'fm='+encodeURIComponent(CryptoJS.AES.encrypt(JSON.stringify({'text':randomIntFromInterval(1,1000000)}),pass_enc).toString()));
+  xhr.upload.addEventListener("progress", (event) => {
+	  if (event.lengthComputable) {
+		//console.log("upload progress:", event.loaded / event.total);
+		//statusDiv.innerHTML = event.loaded / event.total;
+		uploadProgress.value = event.loaded / event.total;
+	  }
+	});
+
+	// Set up a handler for when the task for the request is complete.
+	xhr.onload = function () {
+	  if (xhr.status === 200) {
+		//statusDiv.innerHTML = 'Your upload is successful..';
+		$('#upload-progress').hide();
+		//sendMessage('private_msg','<a class="fileel" onclick="pulldata(this.id, this,\''+document.getElementById('fileupload_password').value+'\'); return false;" id="upload/uploads/'+fileupload.files[0].name+'">'+'upload/uploads/'+fileupload.files[0].name+'</a>');
+		//sendMessage('private_msg',);
+		
+		var message =  '<a class="fileel" onclick="pulldata(this.id, this,\''+document.getElementById('fileupload_password').value+'\');" id="'+fileupload.files[0].name+'" download="'+fileupload.files[0].name+'">'+''+fileupload.files[0].name+'</a>';
+							var channel = localChannel || remoteChannel;
+							// Send message. The other client will receive this message in 'onmessage' function from channel
+							console.log('Mesjul :'+message);
+							var text = utf8.encode(punycode.ToASCII(message));
+							console.log('Mesjul :'+text);
+							var msg = {
+								type: '',
+								user: document.getElementById('name-text').value,
+								text:text,
+								date: Date.now()
+							};
+							signaling_socket.emit('player move', CryptoJS.AES.encrypt(JSON.stringify(msg),pass_enc).toString());
+	  } else {
+	  $('#upload-progress').hide();
+		statusDiv.innerHTML = 'An error occurred during the upload. Try again.';
+	  }
+	};
+  xhr.send(datapack);
+}
+document.getElementById('public-text').addEventListener('dragover', (e) => {
+    e.preventDefault();
+	});
+	document.getElementById('public-text').addEventListener('drop', (e) => {
+		document.getElementById('fileupload').files = e.dataTransfer.files;
+		//uploadFile2();
+		upload();
+		e.preventDefault();
+	});
+$('#fileupload_password').on('input',function(e){
+	this.value = this.value.toLowerCase();
+});
+function pulldata(file, outelement, key) {
+	/*if (!e) var e = window.event;
+	e.stopPropagation();*/
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function(e) {
+	console.log("pulling!");
+
+	    if(xhr.readyState == 4){
+	    	var outdata = xhr.responseText;
+	    	var decrypted = "data:application/octet-stream;base64,";
+	    	//console.log(outdata);
+	    	try {
+	    		//console.log(outelement.href);
+	    		if(!outelement.href.match("base64")) {
+			    	decrypted += Base64Decrypt(outdata, key);
+			    	//console.log(decrypted);
+			    	outelement.href = decrypted;
+			    	outelement.className = "downloaded";
+					e.preventDefault();
+			    	//outelement.innerHTML = file+"(pulled! click to saveas)";
+		    	}
+	    	}
+	    	catch(err) {
+				console.log(err);
+	    		alert("wrong key!");
+	    	}
+		};
+	}
+  	xhr.open('GET', 'files/'+file, true);
+ 	xhr.send();
+ 	return false;
+}
+function upload() {
+  /*if ( event.preventDefault ) event.preventDefault();
+  event.returnValue = false;*/
+  var reader = new FileReader();
+
+  // This is used to get the various elements, file, password etc.
+  var files = document.getElementById('fileupload').files;
+  var key = document.getElementById('fileupload_password').value;
+  //var filename = document.getElementById('filename').value;
+  var filename = document.getElementById('fileupload').value;
+ 
+  if(!key) {
+    alert("key not set!");
+    return false;
+  }
+  if(!files[0]) {
+    alert("no file selected!")
+    return false;
+  }
+  reader.onload = function() {
+    
+    var b64str = reader.result.split(",")[1];
+    //console.log(b64str);
+
+    //document.getElementById('status').innerHTML = "doing client side encryption....";
+
+    var crypt = Base64Crypt(b64str, key);
+
+    // For debug purposes set the value of the encrypt box
+    //document.getElementById('encrypt').innerHTML = crypt; 
+    
+    // For debug purposes set the value of the decrypt box
+    //document.getElementById('raw').innerHTML = Crypto.AES.decrypt(crypt, key);
+    //document.getElementById('status').innerHTML = "uploading....";
+    // Generate a random boundary
+    var boundary = "-----------------"+Math.floor(Math.random()*32768)+Math.floor(Math.random()*32768);
+    
+    var datapack = PackData(boundary, crypt, filename, "fileupload");
+    try {
+      UploadData("upload", datapack, boundary);
+      
+      //document.getElementById('status').innerHTML = "uploaded successfully!";
+    }
+    catch(er) {
+      //document.getElementById('status').innerHTML = "error uploading!";
+    }
+    
+};
+  
+  reader.readAsDataURL(files[0]);
+  
+  return false;
+}
+
+window.onbeforeunload = function(e){
+	signaling_socket.close();
+	if(!e) e = window.event;
+    //e.cancelBubble is supported by IE - this will kill the bubbling process.
+    e.cancelBubble = true;
+    e.returnValue = 'You sure you want to leave?'; //This is displayed on the dialog
+
+    //e.stopPropagation works in Firefox.
+    if (e.stopPropagation) {
+        e.stopPropagation();
+        e.preventDefault();
+    }
+};
+/*setInterval(function(){ $("video").resizable({
+    aspectRatio: true
+});},3000);*/
+var logMessage = (message) => {
+	var newMessage = document.createElement('div');
+	newMessage.innerText = message;
+	messagesEl.appendChild(newMessage);
+};
+var sendButton = document.getElementById('message-button');
+
+sendButton.addEventListener('click', () => {
+	// GET message from input
+	var message = document.getElementById('public-text').value;
+	
+	var channel = localChannel || remoteChannel;
+	// Send message. The other client will receive this message in 'onmessage' function from channel
+	console.log('Mesjul :'+message);
+	var text = utf8.encode(punycode.ToASCII(message));
+	console.log('Mesjul :'+text);
+	var msg = {
+		type: '',
+		user: document.getElementById('name-text').value,
+		text:text,
+		date: Date.now()
+	};
+	//channel.send(JSON.stringify(msg));
+	signaling_socket.emit('player move', CryptoJS.AES.encrypt(JSON.stringify(msg),pass_enc).toString());
+});
+var loginButton = document.getElementById('login-button');
+loginButton.addEventListener('click', function(){
+	localStorage.setItem(window.location.host+'_pass', document.getElementById('pass').value);
+	//pass_enc = localStorage.getItem(window.location.host+'_pass');
+	document.getElementById('name-text').value = localStorage.getItem(window.location.host+'_user2');
+	pass_enc = document.getElementById('pass').value;
+	var iduser = randomIntFromInterval(1,1000000);
+	document.cookie = 'fm_'+iduser+'='+encodeURIComponent(CryptoJS.AES.encrypt(JSON.stringify({'text':randomIntFromInterval(1,1000000)}),pass_enc).toString());
+	document.cookie = 'room_'+iduser+'='+document.getElementById('room').value;
+	//connect();
+	signaling_socket = io(location.host,{
+      transports: ["websocket"],
+});
+	init();
+});
+var muteButton = document.getElementById('mute-button');
+muteButton.addEventListener('click', function(){
+	localStorage.setItem(window.location.host+'_mute',parseInt(localStorage.getItem(window.location.host+'_mute'))?0:1);
+});
+setInterval(function(){
+	$("video").prop("muted",parseInt(localStorage.getItem(window.location.host+'_mute'))?true:false);
+},1000);	
+//document.addEventListener('DOMContentLoaded', function() {
+	// Loop through all the input boxes and add enter key press event listener.
+	// After the message is entered, make the textbox blank again except username.
+	let inputNodes = document.querySelectorAll('input[type="text"],textarea');
+	if(inputNodes.length) {
+		inputNodes.forEach(elInput => {
+			elInput.addEventListener('keypress', e => {
+				// Enter key press.
+				if(e.keyCode == 13) {
+					switch(elInput.getAttribute('id')) {
+						case 'public-text':
+							// GET message from input
+							var message =  document.getElementById('public-text').value;
+							var channel = localChannel || remoteChannel;
+							// Send message. The other client will receive this message in 'onmessage' function from channel
+							console.log('Mesjul :'+message);
+							var text = utf8.encode(punycode.ToASCII(message));
+							console.log('Mesjul :'+text);
+							var msg = {
+								type: '',
+								user: document.getElementById('name-text').value,
+								text:text,
+								date: Date.now()
+							};
+							signaling_socket.emit('player move', CryptoJS.AES.encrypt(JSON.stringify(msg),pass_enc).toString());
+							elInput.value = '';
+							break;
+						case 'name-text':
+							localStorage.setItem(window.location.host + '_user2', document.getElementById('name-text').value);
+							break;
+					}
+				}
+			});
+		});
+	}
+//});
+//document.getElementById('name-text').value = localStorage.getItem(window.location.host + '_user2');
+$('#public-text').keypress(function(event) {
+	//event.stopPropagation();
+	//console.log('event:keypress', event.which); //work
+	var length = $(this).val().length;
+	if(length >= 1850) {
+		event.preventDefault();
+	}
+	if(event.which == 13) {
+		//console.log('event:keypress2', event.which); //work
+		//$('#txtMessage').val(''); //not work
+		$(this).val(''); // this work
+		event.preventDefault();
+	}
+});
+$('#public-text').bind('paste', function(event) {
+	var len = $(this).val().length;
+	if(len > 1850) {
+		$(this).val($(this).val().slice(0, 1850));
+	}
+});
+setInterval(function() {
+	var msg = $('#public-text').val();
+	for(var i = 0; i < emojis.length; i++) {
+		msg = msg.replaceAll(emojis[i][0], emojis[i][1]);
+	}
+	$('#public-text').val(msg);
+}, 1000);
+document.getElementById('public-text').addEventListener('dragover', (e) => {
+	e.preventDefault();
+});
+document.getElementById('public-text').addEventListener('drop', (e) => {
+	document.getElementById('fileupload').files = e.dataTransfer.files;
+	//uploadFile2();
+	upload();
+	e.preventDefault();
+});
+
+
+</script>
+    </body>
+</html>

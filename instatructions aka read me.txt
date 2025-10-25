@@ -1,0 +1,24 @@
+modify password.txt and after install to have the plain password
+install Nodejs(runtimes of VC https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170 and https://nodejs.org/en/download/prebuilt-installer ) , install_chat.bat,start_node3.bat and set the password in password.txt, start_vbs.bat, https://localhost:443 if not having the apache started set the password and refresh run thar batch to open ports in firewall (0and to disable the response to ping if no router in front) and if port forwarded from router startcom4_chat42.bat for IPV4 IP or startcom_chat42IPV6.bat fro IPPV6 ip see at https://www.whatissmyip.com
+you must set what in pass1 file admin2(copy the directory admin2 in one webserver with php and pay attetioon to those paths for pass1 file when setting) for digest and copy pass1 in node directory(start_node3.bat) is admin with a
+
+rune add_80-8081-3000-8081 and_block_ping.bat to open firewall and to forward the port see the hardware router (window key+r run "cmd" and there "ipconfig" and the ip or the gateway and https://ip:443 of the gateway - in browser user and password either typical for that type either from contract ... on port forward section add a rule predefined for webserver to your computer and modify the the port to 443 test startcom_chat4.bat and what there to offer to friends
+
+you can use(even to restart) start_chat.vbs to start silent (kill node in task manager if not pleased) createa a shostcut(send to desktop...) windows key+R and run "shell:startup" and copy that shortcut(,lnk) there
+
+automatically set at start-up by this installer
+
+modify passwords.json and after install to have the plain password with password for every chat room and can add unlimited
+
+double-click in directory of the archive(after unarchiving) of the kit of the webchat on password-tools-master/Password Generator.html to open in a browser for you to generate your passwords see password.jpg
+
+you can do this for packages _node.txt lin linux :
+That's called a "shell script."
+Add this to the top of your file:
+#!/bin/sh
+Then execute this command:
+chmod +x filename
+Then execute it like a program:
+./filename
+
+$./bash_install packages.sh packages_node.txt
